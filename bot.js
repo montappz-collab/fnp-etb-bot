@@ -50,10 +50,37 @@ client.on('ready', async () => {
   }
 });
 
-client.on('messageCreate', (message) => {
+let alertCount = 0;
+const startTime = Date.now();
+
+client.on('messageCreate', async (message) => {
   if (message.author.bot) return;
   if (message.channelId !== TEST_CHANNEL_ID) return;
   console.log(`📨 [${new Date().toISOString()}] ${message.author.tag}: ${message.content.substring(0, 80)}`);
+
+  const content = message.content.trim().toLowerCase();
+
+  if (content === '!stats') {
+    const uptimeMin = Math.floor((Date.now() - startTime) / 60000);
+    const embed = new EmbedBuilder()
+      .setColor(0x00AAFF)
+      .setTitle('📊 FNP-ETB-Bot Stats')
+      .addFields(
+        { name: 'Status', value: 'Online', inline: true },
+        { name: 'Uptime', value: `${uptimeMin} min`, inline: true },
+        { name: 'Alerts Logged', value: `${alertCount}`, inline: true }
+      )
+      .setFooter({ text: 'Friday Night Pulls • ETB Alert Monitor' });
+    await message.reply({ embeds: [embed] });
+    return;
+  }
+
+  if (content === '!ping') {
+    await message.reply('🏓 Pong! Bot is alive.');
+    return;
+  }
+
+  alertCount++;
 });
 
 client.on('error', (error) => console.error('❌ Error:', error.message));
