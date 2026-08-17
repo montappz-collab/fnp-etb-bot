@@ -2,3 +2,15 @@ node_modules/
 .env
 .env.local
 *.log
+
+# Deploy scaffolding. These carried a live Discord bot token and a live Railway API
+# token in plaintext while this repository was PUBLIC. Nothing ever reached the remote -
+# verified against committed history - but they sat one `git add .` from doing so.
+# The kit now lives outside the working tree; these patterns stop it coming back.
+*DEPLOY*.bat
+*DEPLOY*.txt
+*DEPLOY*.md
+DEPLOYMENT-*
+1-CLICK-*
+.env.*
+!.env.example
